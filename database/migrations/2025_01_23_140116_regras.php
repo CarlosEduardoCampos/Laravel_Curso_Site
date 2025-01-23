@@ -11,21 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produtos', function (Blueprint $table) {
+        Schema::create('regras', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->text('descricao');
-            $table->double('preco', 10, 2);
-            $table->string('slug');
-            $table->string('img')->nullable;
+            $table->String('nome');
+            $table->timestamps();
+        });
 
+        # Tabela de relacionamento de Regras e Usuario:
+        Schema::create('regra_user', function (Blueprint $table){
+            $table->id();
+            
             # Chave estrageira de usuario:
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+
+            # Chave estrtageira de regras:
+            $table->unsignedBigInteger('id_regra');
+            $table->foreign('id_regra')->references('id')->on('regras');
             
-            # Chave estrangeira de categoria:
-            $table->unsignedBigInteger('id_categoria');
-            $table->foreign('id_categoria')->references('id')->on('users')->onDelete('cascade')->onUpdade('cascade');
             $table->timestamps();
         });
     }
@@ -35,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produtos');
+        Schema::dropIfExists('regras');
     }
 };
